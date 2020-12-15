@@ -54,10 +54,13 @@ $(document).ready(() => {
 
         tableRow.onclick = function() {
             renderingUserDetails(data);
-            removeClass();
-            tableRow.classList.add('active');
+            // removeClass();
 
         }
+        $(document).on('click', '.data-row', function() {
+            $(this).addClass('active').siblings().removeClass('active');
+        })
+
 
         return tableRow;
     }
@@ -72,18 +75,31 @@ $(document).ready(() => {
 
     const renderingUserDetails = (item) => {
         userName.innerHTML = `<b>User selected:</b> ${item.firstName} ${item.lastName}`;
-        description.innerHTML = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, quia nihil. Est, illum minima libero rerum, nihil distinctio placeat sint nam quae repellendus obcaecati delectus totam non odio. Sint, reprehenderit?`;
+        description.innerHTML = `${item.description}`;
         address.innerHTML = `<b>Address:</b> ${item.address.streetAddress}`
         city.innerHTML = `<b>City:</b> ${item.address.city}`;
         state.innerHTML = `<b>State:</b> ${item.address.state}`;
         zip.innerHTML = `<b>Zip:</b> ${item.address.zip}`;
     }
 
-    const removeClass = () => {
-        tableData.map(item => {
-            document.getElementById(item.id).classList.remove('active');
-            console.log(item.id);
-        });
+    const searchFun = () => {
+        let filter = document.getElementById('search-box').value.toUpperCase();
+
+        let tr = tableBody.getElementsByTagName('tr');
+        for (i = 0; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName('td')[1];
+
+            let textvalue = td.textContent || td.innerHTML;
+            if (textvalue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = '';
+
+            } else {
+                tr[i].style.display = 'none';
+            }
+
+        }
     }
+    const searchBox = document.getElementById('search-box');
+    searchBox.addEventListener('input', searchFun);
 
 });
